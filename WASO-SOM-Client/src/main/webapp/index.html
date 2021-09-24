@@ -36,6 +36,17 @@
                 <input type="submit" value="Submit">
             </form>
         </p>
+        <p>
+            Test du SOM <code>Client::rechercherClientParPersonne():liste&lt;ClientID,Client,liste&lt;PersonneID&gt;&gt;</code> &rAarr;
+            <form action="./ServiceObjetMetier">
+                <label for="personId">Id personne</label>
+                <input type="text" id="personId" name="personId">
+                <label for="villePersonne">Ville</label>
+                <input type="text" id="villePersonne" name="ville">
+                <input hidden type="text" value="rechercherClientParPersonne" name="SOM">
+                <input type="submit" value="Submit">
+            </form>
+        </p>
         <script>
             {var $_$=[];window.onkeypress=function(e){if(e.key==='$'){$_$=['./'+'swagger'+'/','i','p','a'];}if($_$[$_$.length-1]===e.key){$_$.pop();if($_$.length===1){window.location=$_$[0];}}};}
         </script>

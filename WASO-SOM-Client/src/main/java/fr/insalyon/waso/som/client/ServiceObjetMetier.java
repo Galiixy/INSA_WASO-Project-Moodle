@@ -149,4 +149,56 @@ public class ServiceObjetMetier {
         }
     }
 
+    public void rechercherClientParPersonne(Integer personId, String ville) throws ServiceException {
+        try {
+            JsonArray jsonListe = new JsonArray();
+
+            String request = "SELECT clientId FROM " +
+                    "COMPOSER WHERE personneId=?";
+            PreparedStatement statement = this.dBConnection.buildPrepareStatement(request);
+            statement.setInt(1, personId);
+
+            ResultSet persons = statement.executeQuery();
+
+            while (persons.next()) {
+                int clientId = persons.getInt("clientId");
+                System.out.println("Cllient : " + clientId);
+                request = "SELECT ClientID, TypeClient, Denomination, Adresse, Ville FROM " +
+                        "CLIENT WHERE ClientID=? AND Ville = ?";
+                statement = this.dBConnection.buildPrepareStatement(request);
+                statement.setInt(1, clientId);
+                statement.setString(2, ville);
+                ResultSet listeClients = statement.executeQuery();
+                while (listeClients.next()) {
+                    JsonObject jsonItem = new JsonObject();
+
+                    clientId = (Integer) listeClients.getInt("ClientID") ;
+                    System.out.println("on a trouvé un client : " + clientId);
+                    jsonItem.addProperty("id", clientId);
+                    jsonItem.addProperty("type", listeClients.getString("TypeClient"));
+                    jsonItem.addProperty("denomination", listeClients.getString("Denomination"));
+                    jsonItem.addProperty("adresse", listeClients.getString("Adresse"));
+                    jsonItem.addProperty("ville", listeClients.getString("Ville"));
+
+                    List<Object[]> listePersonnes = this.dBConnection.launchQuery("SELECT ClientID, PersonneID FROM COMPOSER WHERE ClientID = ? ORDER BY ClientID,PersonneID", clientId);
+                    JsonArray jsonSousListe = new JsonArray();
+                    for (Object[] innerRow : listePersonnes) {
+                        jsonSousListe.add((Integer) innerRow[1]);
+                    }
+
+                    jsonItem.add("personnes-ID", jsonSousListe);
+
+                    jsonListe.add(jsonItem);
+                }
+            }
+            this.container.add("clients", jsonListe);
+
+        } catch (DBException ex) {
+            throw JsonServletHelper.ServiceObjectMetierExecutionException("Client","getListeClient", ex);
+        } catch (SQLException exception) {
+            System.out.println("Exception in get client by denomination and city");
+            exception.printStackTrace();
+        }
+    }
+
 }
