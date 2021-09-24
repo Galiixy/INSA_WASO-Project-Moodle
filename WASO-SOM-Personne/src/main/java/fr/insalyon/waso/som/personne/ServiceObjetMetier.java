@@ -6,7 +6,12 @@ import fr.insalyon.waso.util.DBConnection;
 import fr.insalyon.waso.util.JsonServletHelper;
 import fr.insalyon.waso.util.exception.DBException;
 import fr.insalyon.waso.util.exception.ServiceException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -76,25 +81,27 @@ public class ServiceObjetMetier {
 
     void rechercherPersonneParNom(String nomPersonneParametre)throws ServiceException  {
        try {
-            List<Object[]> listePersonne = this.dBConnection.launchQuery("SELECT PersonneID, Nom, Prenom, Mail FROM PERSONNE WHERE Nom ="+ nomPersonneParametre +"ORDER BY PersonneID");
-
+            PreparedStatement  statement =this.dBConnection.buildPrepareStatement("SELECT PersonneID, Nom, Prenom, Mail FROM PERSONNE WHERE Nom =? ORDER BY PersonneID");
+            statement.setString(1, nomPersonneParametre);
+            ResultSet rs = statement.executeQuery();
             JsonArray jsonListe = new JsonArray();
-
-            for (Object[] row : listePersonne) {
+            while (rs.next()) {
                 JsonObject jsonItem = new JsonObject();
-
-                jsonItem.addProperty("id", (Integer) row[0]);
-                jsonItem.addProperty("nom", (String) row[1]);
-                jsonItem.addProperty("prenom", (String) row[2]);
-                jsonItem.addProperty("mail", (String) row[3]);
+                
+                jsonItem.addProperty("id", rs.getInt("PersonneID"));
+                jsonItem.addProperty("nom", rs.getString("Nom"));
+                jsonItem.addProperty("prenom", rs.getString("Prenom"));
+                jsonItem.addProperty("mail", rs.getString("Mail"));
 
                 jsonListe.add(jsonItem);
             }
-
+         
             this.container.add("personnes", jsonListe);
 
         } catch (DBException ex) {
             throw JsonServletHelper.ServiceObjectMetierExecutionException("Personne", "rechercherPersonneParNom", ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ServiceObjetMetier.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
