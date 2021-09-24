@@ -81,6 +81,7 @@ public class ServiceObjetMetier {
 
     void rechercherPersonneParNom(String nomPersonneParametre)throws ServiceException  {
        try {
+           // faire une requete avec LIKE pour ne pas avoir la casse !
             PreparedStatement  statement =this.dBConnection.buildPrepareStatement("SELECT PersonneID, Nom, Prenom, Mail FROM PERSONNE WHERE Nom =? ORDER BY PersonneID");
             statement.setString(1, nomPersonneParametre);
             ResultSet rs = statement.executeQuery();
