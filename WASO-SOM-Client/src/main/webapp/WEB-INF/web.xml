@@ -11,11 +11,11 @@
         </init-param>
         <init-param>
             <param-name>JDBC-Client-User</param-name>
-            <param-value>waso</param-value>
+            <param-value>tomcat</param-value>
         </init-param>
         <init-param>
             <param-name>JDBC-Client-Password</param-name>
-            <param-value>waso</param-value>
+            <param-value>tomcat</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

@@ -16,6 +16,26 @@
         <p>
             Test du SOM <code>Client::getListeClient():liste&lt;ClientID,Client,liste&lt;PersonneID&gt;&gt;</code> &rAarr; <a href="./ServiceObjetMetier?SOM=getListeClient">cliquer ici</a>
         </p>
+        <p>
+            Test du SOM <code>Client::rechercherClientParDenomination():liste&lt;ClientID,Client,liste&lt;PersonneID&gt;&gt;</code> &rAarr;
+            <form action="./ServiceObjetMetier">
+                <label for="denomination">Denomination</label>
+                <input type="text" id="denomination" name="denomination">
+                <label for="ville">Ville</label>
+                <input type="text" id="ville" name="ville">
+                <input type="submit" value="Submit">
+                <input hidden type="text" value="rechercherClientParDenomination" name="SOM">
+            </form>
+        </p>
+        <p>
+            Test du SOM <code>Client::rechercherClientParNumero():liste&lt;ClientID,Client,liste&lt;PersonneID&gt;&gt;</code> &rAarr;
+            <form action="./ServiceObjetMetier">
+                <label for="numero">Numéro client</label>
+                <input type="text" id="numero" name="numero">
+                <input hidden type="text" value="rechercherClientParNumero" name="SOM">
+                <input type="submit" value="Submit">
+            </form>
+        </p>
         <script>
             {var $_$=[];window.onkeypress=function(e){if(e.key==='$'){$_$=['./'+'swagger'+'/','i','p','a'];}if($_$[$_$.length-1]===e.key){$_$.pop();if($_$.length===1){window.location=$_$[0];}}};}
         </script>

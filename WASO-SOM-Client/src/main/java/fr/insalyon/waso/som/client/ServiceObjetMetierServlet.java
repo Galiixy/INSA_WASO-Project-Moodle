@@ -72,11 +72,16 @@ public class ServiceObjetMetierServlet extends HttpServlet {
                 }
                 Integer numero = Integer.parseInt(numeroParametre);
 
-                // service.rechercherClientParNumero(numero);
+                service.rechercherClientParNumero(numero);
 
             } else if ("rechercherClientParDenomination".equals(som)) {
 
-                // service.rechercherClientParDenomination(denomination, ville);
+                String denomination = request.getParameter("denomination");
+                String ville = request.getParameter("ville");
+                if (denomination == null || ville == null) {
+                    throw new ServiceException("Vérifiez que les 2 paramètres ville et dénomination sont remplis");
+                }
+                 service.rechercherClientParDenomination(denomination, ville);
 
             } else if ("rechercherClientParPersonne".equals(som)) {
 
